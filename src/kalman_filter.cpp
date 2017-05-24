@@ -2,6 +2,7 @@
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using namespace std;
 
 KalmanFilter::KalmanFilter() {}
 
@@ -49,4 +50,5 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   TODO:
     * update the state by using Extended Kalman Filter equations
   */
+
 }

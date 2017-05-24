@@ -76,21 +76,24 @@ int main()
           		meas_package.raw_measurements_ << px, py;
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
+              
+              cout << "LIDAR measurement is given." << endl;
+
           } else if (sensor_type.compare("R") == 0) {
+      	  		meas_package.sensor_type_ = MeasurementPackage::RADAR;
+          		meas_package.raw_measurements_ = VectorXd(3);
+          		float ro;
+      	  		float theta;
+      	  		float ro_dot;
+          		iss >> ro;
+          		iss >> theta;
+          		iss >> ro_dot;
+          		meas_package.raw_measurements_ << ro,theta, ro_dot;
+          		iss >> timestamp;
+          		meas_package.timestamp_ = timestamp;
 
-      	  		// meas_package.sensor_type_ = MeasurementPackage::RADAR;
-          		// meas_package.raw_measurements_ = VectorXd(3);
-          		// float ro;
-      	  		// float theta;
-      	  		// float ro_dot;
-          		// iss >> ro;
-          		// iss >> theta;
-          		// iss >> ro_dot;
-          		// meas_package.raw_measurements_ << ro,theta, ro_dot;
-          		// iss >> timestamp;
-          		// meas_package.timestamp_ = timestamp;
+              cout << "RADAR measurement is given." << endl;
           }
-
         float x_gt;
     	  float y_gt;
     	  float vx_gt;
@@ -105,9 +108,13 @@ int main()
     	  gt_values(2) = vx_gt;
     	  gt_values(3) = vy_gt;
     	  ground_truth.push_back(gt_values);
+
+        cout << "ground truth values are set" << endl;
           
-        //Call ProcessMeasurment(meas_package) for Kalman filter
-    	  // fusionEKF.ProcessMeasurement(meas_package);    	  
+
+          //Call ProcessMeasurment(meas_package) for Kalman filter
+    	  fusionEKF.ProcessMeasurement(meas_package);
+        cout << "processing is done." << endl;    	  
 
     	  //Push the current estimated x,y positon from the Klaman filter's state vector
 
@@ -126,6 +133,7 @@ int main()
     	  estimations.push_back(estimate);
 
     	  VectorXd RMSE = tools.CalculateRMSE(estimations, ground_truth);
+        cout << "rmse is calculated." << endl;
 
           json msgJson;
           msgJson["estimate_x"] = p_x;
