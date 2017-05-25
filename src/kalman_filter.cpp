@@ -56,23 +56,26 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float vy = x_(3);
 
   float c1 = sqrt(px*px+py*py);
-  
-  // normalizing angles
-  float phi_ = atan2(py,px);
-  if (phi_ > PI){
-    phi_ -= PI;
-  } else {
-    if (phi_ < -PI){
-      phi_ += PI;
-    }
-  }
 
   // predict using non-linear model
   VectorXd z_pred = VectorXd(3);
-  z_pred << c1, phi_, (px*vx+py*vy)/c1;
+  z_pred << c1, atan2(py,px), (px*vx+py*vy)/c1;
   
-  // EKF update matrices
+  // calculate measurement error
   VectorXd y = z - z_pred;
+  float phi_ = y(1);
+  
+  if (phi_ > PI){
+    phi_ -= 2 * PI;
+  } else {
+    if (phi_ < -PI){
+      phi_ += 2 * PI;
+    }
+  }
+  
+  y(1) = phi_;
+
+  // EKF update matrices
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
