@@ -77,7 +77,7 @@ int main()
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
               
-              cout << "LIDAR measurement is given." << endl;
+              cout << endl << "LIDAR measurement is given." << endl;
 
           } else if (sensor_type.compare("R") == 0) {
       	  		meas_package.sensor_type_ = MeasurementPackage::RADAR;
@@ -92,7 +92,7 @@ int main()
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
 
-              cout << "RADAR measurement is given." << endl;
+              cout << endl << "RADAR measurement is given." << endl;
           }
         float x_gt;
     	  float y_gt;
@@ -108,8 +108,6 @@ int main()
     	  gt_values(2) = vx_gt;
     	  gt_values(3) = vy_gt;
     	  ground_truth.push_back(gt_values);
-
-        cout << "ground truth values are set" << endl;
           
 
           //Call ProcessMeasurment(meas_package) for Kalman filter
